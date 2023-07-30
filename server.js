@@ -50,7 +50,7 @@ app.post('/save-name', (req, res) => {
             .then(res => {
                 console.log("added")
             })
-    }catch(e){
+    } catch (e) {
         console.log(e)
     }
     return res.json({ status: 'ok' })
@@ -142,22 +142,22 @@ app.get('/folders', (req, res) => {
 })
 
 app.post('/delete', (req, res) => {
-    let {file, id} = req.body;
+    let { file, id } = req.body;
     db.delete().from('files').where('id', '=', id).then(msg => {
         res.json("deleted")
     })
     fs.unlink(__dirname + '/files/' + file, (err) => {
-        if(err) throw err;
+        if (err) throw err;
         console.log("file deleted")
     })
 })
 
 app.post('/deletefolder', (req, res) => {
-    let {folder} = req.body;
+    let { folder } = req.body;
     db.delete().from('folders').where('name', '=', folder)
-    .then(msg => {
-        res.json("deleted");
-    })
+        .then(msg => {
+            res.json("deleted");
+        })
 })
 
 app.listen(process.env.port, () => console.log("server started on port", process.env.port))
