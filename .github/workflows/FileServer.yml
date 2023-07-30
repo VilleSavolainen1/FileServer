@@ -30,6 +30,7 @@ jobs:
           pwd
           npm i
           cd frontend/fileserver
+          npm i
           npm run build
 
       # Runs a single command using the runners shell
