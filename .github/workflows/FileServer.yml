@@ -29,6 +29,8 @@ jobs:
       - run: |
           pwd
           npm i
+          cd frontend
+          npm run build
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
