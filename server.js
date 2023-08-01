@@ -7,7 +7,7 @@ const app = express();
 const knex = require('knex');
 const fs = require('fs-extra');
 const multer = require('multer');
-
+const jwt = require('jsonwebtoken')
 
 
 const db = knex({
@@ -24,6 +24,14 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use('/files', express.static('files'));
 
+const getTokenFrom = request => {
+    const authorization = request.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+        return authorization.replace('Bearer ', '')
+    }
+    return null
+}
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'files')
@@ -39,10 +47,18 @@ const upload = multer({ storage: storage });
 
 
 app.post('/upload', upload.single('file'), (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     res.send("saved")
 })
 
 app.post('/save-name', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     let { file, folder } = req.body;
     try {
         db.insert({ file: file, folder: folder })
@@ -58,6 +74,10 @@ app.post('/save-name', (req, res) => {
 
 
 app.get('/filenames', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     db.select('*').from('files').then(files => {
         res.json(files)
     })
@@ -66,12 +86,20 @@ app.get('/filenames', (req, res) => {
 
 
 app.post('/files', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     let { filename } = req.body;
     res.sendFile(__dirname + '/files/' + filename)
 })
 
 
 app.get('/download/:filename(*)', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     let file = req.params.filename;
     res.download(__dirname + '/files/' + file, file)
 })
@@ -86,17 +114,9 @@ app.post('/register', async (req, res) => {
             trx.insert({ username: username, password: hash })
                 .into('users')
                 .returning('username')
-                .then(loginName => {
-                    return trx('login').insert({
-                        name: username,
-                        joined: new Date()
-                    })
-                        .then(user => {
-                            res.json(user[0])
-                        })
-                })
                 .then(trx.commit)
                 .catch(trx.rollback)
+            res.json(username)
         })
     } catch (e) {
         console.log(e)
@@ -104,19 +124,21 @@ app.post('/register', async (req, res) => {
     }
 })
 
-
+// Sign in
 app.post('/signin', (req, res) => {
+    console.log(req, res)
     db.select('username', 'password').from('users')
         .where('username', '=', req.body.username)
         .then(data => {
             const isValid = bcrypt.compareSync(req.body.password, data[0].password);
             if (isValid) {
-                return db.select('*').from('login')
-                    .where('name', '=', req.body.username)
-                    .then(user => {
-                        res.json(user[0])
-                    })
-                    .catch(err => res.status(400).send(err))
+                const userForToken = {
+                    username: req.body.username,
+                    password: req.body.password
+                }
+
+                const token = jwt.sign(userForToken, process.env.SECRET, { expiresIn: 60 * 60 })
+                res.json({ token, username: req.body.username })
             } else {
                 res.status(500).json("väärin")
             }
@@ -126,6 +148,10 @@ app.post('/signin', (req, res) => {
 
 
 app.post('/create-folder', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     let { folder } = req.body;
     db.insert({ name: folder }).into('folders')
         .then(r => {
@@ -135,6 +161,10 @@ app.post('/create-folder', (req, res) => {
 })
 
 app.get('/folders', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     db.select('*').from('folders')
         .then(r => {
             res.send(r)
@@ -142,6 +172,10 @@ app.get('/folders', (req, res) => {
 })
 
 app.post('/delete', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     let { file, id } = req.body;
     db.delete().from('files').where('id', '=', id).then(msg => {
         res.json("deleted")
@@ -153,6 +187,10 @@ app.post('/delete', (req, res) => {
 })
 
 app.post('/deletefolder', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.id) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
     let { folder } = req.body;
     db.delete().from('folders').where('name', '=', folder)
         .then(msg => {
