@@ -163,12 +163,12 @@ app.post('/create-folder', (req, res) => {
 
 app.get('/folders', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     db.select('*').from('folders')
         .then(r => {
-            res.send(r)
+            res.json(r)
         })
 })
 

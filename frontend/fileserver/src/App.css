@@ -15,7 +15,14 @@
 
 .topBarContent {
   justify-content: center;
+  align-items: center;
   padding: 10px
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .App-header2{
@@ -79,12 +86,16 @@
 
 .logOutButton {
   background: transparent;
-  border: 1px solid #1d1d1d;
+  border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
   color: white;
   font-weight: 600;
   height: 25px;
+}
+
+.foldersCard {
+  margin-top: 50px;
 }
 
 .foldersView {
@@ -93,6 +104,7 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  width: 100%;
 }
 
 .foldersHeader {
@@ -103,8 +115,43 @@
 }
 
 .foldersContent {
-  border: 1px solid rgb(80, 80, 80);
+  display: flex;
+  flex-direction: column;
   border-radius: 6px;
+  width: 30%;
+  height: 100%;
+}
+
+.singleFolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 40px;
+}
+
+.singleFolder:hover {
+  background-color: rgb(243, 243, 243);
+  cursor: pointer;
+}
+
+.folderName {
+  padding-left: 20px;
+}
+
+.folderImage {
+  width: 30px;
+  height: 30px;
+}
+
+.divider {
+  border: 1px solid rgb(224, 224, 224);
+}
+
+.emptyFolder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 @media(max-width: 800px){
