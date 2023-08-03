@@ -46,11 +46,11 @@
   margin: 0 auto;
   justify-content: center;
   text-align: center;
-  border: 1px solid #92abcf;
+  border: 1px solid #768fb4;
   width: 500px;
   padding: 18px 31px 8px 29px;
   background-color: rgb(10, 10, 50);
-  box-shadow: rgba(0, 0, 0, 0.4) 0px 20px 30px, rgb(56, 125, 123) 0px 0px 15px 5px;
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 10px 20px, rgb(172, 172, 172) 0px 0px 15px 5px;
   border-radius: 6px;
   height: 200px;
 }

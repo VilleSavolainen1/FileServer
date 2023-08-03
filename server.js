@@ -23,6 +23,8 @@ const db = knex({
 app.use(cors());
 app.use(bodyParser.json());
 app.use('/files', express.static('files'));
+app.use(express.static('./frontend/fileserver/build'));
+
 
 const getTokenFrom = request => {
     const authorization = request.get('authorization')
@@ -126,7 +128,6 @@ app.post('/register', async (req, res) => {
 
 // Sign in
 app.post('/signin', (req, res) => {
-    console.log(req, res)
     db.select('username', 'password').from('users')
         .where('username', '=', req.body.username)
         .then(data => {

@@ -56,7 +56,7 @@ const Login = () => {
                     <div className="blank"></div>
                     <input id="foldernameinput" type="password" name="password" placeholder="Salasana" onChange={passwordChange} ></input>
                     <div className="blank"></div>
-                    <input className="form-submit" type="submit" value="Kirjaudu" style={{ height: '28px', width: '100px' }} ></input>
+                    <input className="form-submit" type="submit" value="Kirjaudu" style={{ height: '28px', width: '150px' }} ></input>
                     <p className="message">{message}</p>
                 </form>
             </div>
