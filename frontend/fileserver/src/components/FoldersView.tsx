@@ -1,51 +1,27 @@
-import React, { CSSProperties } from 'react'
-import BarLoader from "react-spinners/BarLoader";
+import React from 'react'
 import { getValueForKey } from '../utils';
 import axios from 'axios';
 import { emptyIcon, folderIcon } from '../images';
+import { useNavigate } from "react-router-dom"
+import Loader from './Loader';
+import { Link } from 'react-router-dom';
+import { Folder } from '../types';
 
-export type folder = Array<{ name: string }>
 
-const FoldersView = () => {
-    const [loading, setLoading] = React.useState(false)
-    const [folders, setFolders] = React.useState<folder>([])
+interface foldersProps {
+    folders: Folder[]
+}
 
-    const override: CSSProperties = {
-        display: "block",
-        margin: "0 auto",
-        borderColor: "#fffff",
-    };
-
-    const getFolders = () => {
-        setLoading(true)
-        const token = getValueForKey('access_token')
-        const config = {
-            headers: {
-                "Content-type": "application/json",
-                "Authorization": `Bearer ${token}`,
-            },
-        };
-        axios.get('/folders', config).then(res => {
-            setFolders(res.data)
-            setLoading(false)
-        }).catch(err => {
-            console.log(err)
-            setLoading(false)
-        })
-    }
-
-    React.useEffect(() => {
-        getFolders()
-    }, [])
+const FoldersView = ({ folders }: foldersProps) => {
 
     const renderFolders = () => {
         if (folders && folders.length > 0) {
             return folders.map(fldr => {
                 return (
-                    <div>
-                        <div className="singleFolder" key={fldr.name}>
+                    <div key={fldr.id}>
+                        <div className="singleFolder">
                             <img className="folderImage" src={folderIcon} />
-                            <p className="folderName">{fldr.name}</p>
+                            <Link className="folderName" to={`folders/${fldr.name}`}>{fldr.name}</Link>
                         </div>
                         <div className="divider"></div>
                     </div>
@@ -61,23 +37,15 @@ const FoldersView = () => {
         }
     }
 
-
     return (
         <div className="foldersView">
             <div className="foldersContent">
                 <div className="foldersHeader">
-                    <h1>Kansiot</h1>
+                    <h2 style={{ color: '#ffffff' }}>Kansiot</h2>
                 </div>
                 <div className="foldersCard">
                     {renderFolders()}
                 </div>
-                <BarLoader
-                    color={'green'}
-                    loading={loading}
-                    cssOverride={override}
-                    aria-label="Loading Spinner"
-                    data-testid="loader"
-                />
             </div>
         </div>
     )

@@ -8,6 +8,7 @@ const knex = require('knex');
 const fs = require('fs-extra');
 const multer = require('multer');
 const jwt = require('jsonwebtoken')
+const checkDiskSpace = require('check-disk-space').default
 
 
 const db = knex({
@@ -162,14 +163,18 @@ app.post('/create-folder', (req, res) => {
 })
 
 app.get('/folders', (req, res) => {
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.username) {
-        return res.status(401).json({ error: 'token invalid' })
+    try {
+        const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+        if (!decodedToken.username) {
+            return res.status(401).json({ error: 'token invalid' })
+        }
+        db.select('*').from('folders')
+            .then(r => {
+                res.json(r)
+            })
+    } catch (err) {
+        return res.status(401).json(err)
     }
-    db.select('*').from('folders')
-        .then(r => {
-            res.json(r)
-        })
 })
 
 app.post('/delete', (req, res) => {
@@ -197,6 +202,14 @@ app.post('/deletefolder', (req, res) => {
         .then(msg => {
             res.json("deleted");
         })
+})
+
+app.get('/disk', (req, res) => {
+    checkDiskSpace('/dev/vda1').then((diskSpace) => {
+        return res.status(200).json(diskSpace)
+    }).catch(err => {
+        return res.status(500).json(err)
+    })
 })
 
 app.listen(process.env.port, () => console.log("server started on port", process.env.port))
