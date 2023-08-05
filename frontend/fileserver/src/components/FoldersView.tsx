@@ -31,7 +31,7 @@ const FoldersView = ({ folders }: foldersProps) => {
             return (
                 <div className="emptyFolder">
                     <img src={emptyIcon}></img>
-                    <h3>Tyhjä</h3>
+                    <h3 style={{color: '#ffffff'}}>Tyhjä</h3>
                 </div>
             )
         }

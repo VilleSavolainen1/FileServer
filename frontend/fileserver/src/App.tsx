@@ -90,7 +90,7 @@ function App() {
   }, [])
 
 
-  if (loggedIn) {
+  
     if (loading) {
       return (
         <div className="main">
@@ -112,13 +112,6 @@ function App() {
         </div>
       )
     }
-  } else {
-    return (
-      <div className="main">
-        <Login />
-      </div>
-    )
   }
-}
 
 export default App;
