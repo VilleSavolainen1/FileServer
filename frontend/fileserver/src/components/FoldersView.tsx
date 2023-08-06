@@ -57,6 +57,9 @@ const FoldersView = ({ folders, createFolder }: foldersProps) => {
                 <div className="foldersHeader">
                     <h2 style={{ color: '#ffffff' }}>Kansiot</h2>
                 </div>
+                <div>
+                    <audio controls src="/files/saw.wav" />
+                </div>
                 <div className="createFolderForm">
                     <input id="foldernameinput" type="text" name="username" placeholder="Uusi kansio" onChange={onChangeFolderName}></input>
                     <button onClick={() => onPressCreateFolder()} >Luo</button>

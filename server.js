@@ -23,7 +23,7 @@ const db = knex({
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('./frontend/fileserver/files', express.static('files'));
+app.use('/files', express.static('files'));
 app.use(express.static('./frontend/fileserver/build'));
 
 
@@ -225,7 +225,7 @@ app.post('/deletefolder', (req, res) => {
 })
 
 app.get('/disk', (req, res) => {
-    checkDiskSpace('C:/').then((diskSpace) => {
+    checkDiskSpace('/dev/vda1').then((diskSpace) => {
         return res.status(200).json(diskSpace)
     }).catch(err => {
         return res.status(500).json(err)
