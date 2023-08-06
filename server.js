@@ -23,7 +23,7 @@ const db = knex({
 
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/files', express.static('files'));
+app.use('./frontend/fileserver/files', express.static('files'));
 app.use(express.static('./frontend/fileserver/build'));
 
 
@@ -51,15 +51,27 @@ const upload = multer({ storage: storage });
 
 app.post('/upload', upload.single('file'), (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     res.send("saved")
 })
 
+app.post('/upload-array', upload.array('files', 5), function (req, res) {
+    console.log(req.files)
+    // req.files is array of `photos` files
+    // req.body will contain the text fields, if there were any
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.username) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
+    res.send("saved")
+})
+
+
 app.post('/save-name', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     let { file, folder } = req.body;
@@ -78,7 +90,7 @@ app.post('/save-name', (req, res) => {
 
 app.get('/filenames', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     db.select('*').from('files').then(files => {
@@ -90,11 +102,19 @@ app.get('/filenames', (req, res) => {
 
 app.post('/files', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     let { filename } = req.body;
     res.sendFile(__dirname + '/files/' + filename)
+})
+
+app.get('/allfiles', (req, res) => {
+    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
+    if (!decodedToken.username) {
+        return res.status(401).json({ error: 'token invalid' })
+    }
+    res.sendFile(_dirname + '/files/')
 })
 
 
@@ -151,7 +171,7 @@ app.post('/signin', (req, res) => {
 
 app.post('/create-folder', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     let { folder } = req.body;
@@ -194,7 +214,7 @@ app.post('/delete', (req, res) => {
 
 app.post('/deletefolder', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     let { folder } = req.body;
@@ -205,7 +225,7 @@ app.post('/deletefolder', (req, res) => {
 })
 
 app.get('/disk', (req, res) => {
-    checkDiskSpace('/dev/vda1').then((diskSpace) => {
+    checkDiskSpace('C:/').then((diskSpace) => {
         return res.status(200).json(diskSpace)
     }).catch(err => {
         return res.status(500).json(err)

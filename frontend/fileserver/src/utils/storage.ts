@@ -1,7 +1,6 @@
 import  secureLocalStorage  from  "react-secure-storage"
 
 export const storeValueForKey = (key: string, value: string) => {
-    console.log(key, value)
     secureLocalStorage.setItem(key, value);
 }
 

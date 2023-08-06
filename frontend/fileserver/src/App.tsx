@@ -12,6 +12,7 @@ import TopBar from './components/TopBar';
 import axios from 'axios';
 import { Folder, diskSpace } from './types';
 import Loader from './components/Loader';
+import { create } from 'domain';
 
 type State = {
   folders: Folder
@@ -26,11 +27,22 @@ const initialState: State = {
   }
 }
 
+const events = [
+  "load",
+  "mousemove",
+  "mousedown",
+  "click",
+  "scroll",
+  "keypress",
+]
+
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [folders, setFolders] = useState([initialState.folders])
   const [diskSpace, setDiskSpace] = useState(initialState.diskSpace)
   const [loading, setLoading] = useState(false)
+
+  let timer: any;
 
   const navigate = useNavigate()
 
@@ -42,6 +54,37 @@ function App() {
     deleteValueForKey('access_token')
     navigate('/login')
   }
+
+  const setHasLoggedIn = (value: boolean) => {
+    setLoggedIn(value)
+  }
+
+
+  const handleLogoutTimer = () => {
+    timer = setTimeout(() => {
+      // clears any pending timer.
+      resetTimer();
+      // Listener clean up. Removes the existing event listener from the window
+      Object.values(events).forEach((item) => {
+        window.removeEventListener(item, resetTimer);
+      });
+      // logs out user
+      logOut();
+    }, 1800000); // 30min = 1800000
+  };
+
+  const resetTimer = () => {
+    if (timer) clearTimeout(timer);
+  };
+
+  useEffect(() => {
+    Object.values(events).forEach((item) => {
+      window.addEventListener(item, () => {
+        resetTimer();
+        handleLogoutTimer();
+      });
+    });
+  }, [handleLogoutTimer, resetTimer]);
 
 
   useEffect(() => {
@@ -61,8 +104,10 @@ function App() {
     };
     axios.get('/folders', config).then(res => {
       setFolders(res.data)
+      setLoading(false)
     }).catch(() => {
-      navigate('\login')
+      setLoading(false)
+      navigate('/login')
     })
   }
 
@@ -71,6 +116,7 @@ function App() {
     axios.get('/disk').then(res => {
       if (res.data) {
         setLoading(false)
+        getFolders()
         setDiskSpace(res.data)
       } else {
         setLoading(false)
@@ -81,37 +127,50 @@ function App() {
     })
   }
 
-  useEffect(() => {
-    getFileSpace()
-  }, [])
+  const createFolder = (folder: string) => {
+    const token = getValueForKey('access_token')
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    }
+    axios.post('/create-folder', { folder: folder }, config).then(res => {
+      console.log(res)
+      getFolders()
+    }).catch(err => {
+      console.log(err.response)
+      navigate('/login')
+    })
+  }
 
   useEffect(() => {
-    getFolders()
-  }, [])
+    if (loggedIn) {
+      getFileSpace()
+    }
+  }, [loggedIn])
 
-
-  
-    if (loading) {
-      return (
-        <div className="main">
-          <div className="foldersView">
-            <div className="foldersContent">
-              <Loader />
-            </div>
+  if (loading) {
+    return (
+      <div className="main">
+        <div className="foldersView">
+          <div className="foldersContent">
+            <Loader />
           </div>
         </div>
-      )
-    } else {
-      return (
-        <div>
+      </div>
+    )
+  } else {
+    return (
+      <div>
           <Routes>
-            <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} />} />
+            <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} />} />
             <Route path="/folders/:name" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} />} />
           </Routes>
-        </div>
-      )
-    }
+      </div>
+    )
   }
+}
 
 export default App;

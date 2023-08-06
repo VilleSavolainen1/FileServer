@@ -4,7 +4,11 @@ import { getValueForKey, storeValueForKey } from '../utils';
 import { useNavigate } from "react-router-dom"
 import axios from 'axios';
 
-const Login = () => {
+interface LoginProps {
+    setHasLoggedIn: (value: boolean) => void
+}
+
+const Login = ({setHasLoggedIn}: LoginProps) => {
 
     const [username, setUserName] = React.useState('')
     const [password, setPassword] = React.useState('')
@@ -16,6 +20,7 @@ const Login = () => {
         axios.post('/signin', { username: username, password: password }).then(res => {
             if (res.status === 200) {
                 storeValueForKey('access_token', res.data.token)
+                setHasLoggedIn(true)
                 navigate('/')
             }
         }).catch(err => {
