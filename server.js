@@ -8,6 +8,7 @@ const knex = require('knex');
 const fs = require('fs-extra');
 const multer = require('multer');
 const jwt = require('jsonwebtoken')
+const path = require('path')
 const checkDiskSpace = require('check-disk-space').default
 
 
@@ -21,10 +22,19 @@ const db = knex({
     }
 });
 
+// /files folder
+const filesPathOnServer = path.join(__dirname, '..', '..', '..', '/files')
+
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/files', express.static('files'));
+if (process.env.ENVIRONMENT === 'test') {
+    app.use('/files', express.static('files'));
+} else {
+    app.use(filesPathOnServer, express.static('files'));
+}
+
 app.use(express.static('./frontend/fileserver/build'));
+
 
 
 const getTokenFrom = request => {

@@ -133,7 +133,7 @@
   padding: 20px;
   border-radius: 6px;
   border: 1px solid #2f343d;
-  width: 40vw;
+  width: 50vw;
 }
 
 .foldersView {
@@ -191,6 +191,24 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.uploadFileForm {
+  background-color: white;
+  border-radius: 6px;
+}
+
+.fileRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(44, 44, 44);;
+}
+
+#file-date {
+  color: white;
+  width: 100px;
+  font-size: 14px;
 }
 
 @media(max-width: 800px){

@@ -13,7 +13,6 @@ export interface TopBarProps {
 const TopBar = ({ signOut, diskSpace }: TopBarProps) => {
     const used = diskSpace.size - diskSpace.free
     const percentage: any = (used * 100 / diskSpace.size).toFixed();
-    console.log('PERCENT: ', percentage)
 
     return (
         <div className="topBar">

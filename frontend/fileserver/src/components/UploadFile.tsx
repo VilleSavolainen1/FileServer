@@ -49,13 +49,15 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
     }
 
     return (
-        <form onSubmit={uploadFiles}>
-            <input type="file" multiple onChange={uploadFileHandler} />
-            <button type='submit'>Lähetä</button>
-            {!fileSize && <p style={{ color: 'red' }}>Tiedoston koko ylittyy!!</p>}
-            {fileUploadProgress && <p style={{ color: 'red' }}>Uploading File(s)</p>}
-            {fileUploadResponse != null && <p style={{ color: 'green' }}>{fileUploadResponse}</p>}
-        </form>
+        <div className="uploadFileForm">
+            <form onSubmit={uploadFiles}>
+                <input type="file" multiple onChange={uploadFileHandler} />
+                <button type='submit'>Lähetä</button>
+                {!fileSize && <p style={{ color: 'red' }}>Tiedoston koko ylittyy!!</p>}
+                {fileUploadProgress && <p style={{ color: 'red' }}>Uploading File(s)</p>}
+                {fileUploadResponse != null && <p style={{ color: 'green' }}>{fileUploadResponse}</p>}
+            </form>
+        </div>
     )
 }
 

@@ -6,6 +6,7 @@ import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
+import { emptyIcon } from '../images';
 
 
 interface filesProps {
@@ -19,6 +20,8 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
     const [fileNames, setFileNames] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     const name = useParams().name
+
+    const src = '/files/'
 
 
     const getCurrentFolderFileNames = async () => {
@@ -35,7 +38,37 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
         getCurrentFolderFileNames()
     }, [])
 
-
+    const renderFiles = () => {
+        if (fileNames.length) {
+            return fileNames.map((file: any) => {
+                let fileType = file.file.split(".")[1]; // .txt .wav ....
+                let date = new Date(file.date).toLocaleDateString('fi-fi')
+                if (fileType === 'wav') {
+                    return (
+                        <div key={file.id} className="fileRow">
+                            <p id="file-date">{file.file}</p>
+                            <audio controls src={src + file.file}></audio>
+                            <p id="file-date">{date}</p>
+                        </div>
+                    )
+                } else {
+                    return (
+                        <div key={file.id} className="fileRow">
+                            <p id="file-date">{file.file}</p>
+                            <p id="file-date">{date}</p>
+                        </div>
+                    )
+                }
+            })
+        } else {
+            return (
+                <div className="emptyFolder">
+                    <img src={emptyIcon}></img>
+                    <h3 style={{ color: '#ffffff' }}>Tyhjä</h3>
+                </div>
+            )
+        }
+    }
 
 
     return (
@@ -48,11 +81,11 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
                             <h2 style={{ color: '#ffffff' }}>{name}</h2>
                         </div>
                         <div className="filesView">
-                            <div>
-                                <audio controls src="/files/saw.wav" />
-                            </div>
                         </div>
                         <UploadFile name={name} isLoading={isLoading} />
+                        <div className="foldersCard">
+                            {renderFiles()}
+                        </div>
                     </div>
                 </div>}
         </div>

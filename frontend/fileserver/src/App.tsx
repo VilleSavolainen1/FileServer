@@ -111,7 +111,7 @@ function App() {
     })
   }
 
-  const getFileSpace = () => {
+  const getFileSpace = async () => {
     setLoading(true)
     axios.get('/disk').then(res => {
       if (res.data) {
@@ -119,11 +119,11 @@ function App() {
         getFolders()
         setDiskSpace(res.data)
       } else {
-        setLoading(false)
+        getFolders()
       }
     }).catch(err => {
+      getFolders()
       console.log(err)
-      setLoading(false)
     })
   }
 
@@ -138,8 +138,7 @@ function App() {
     axios.post('/create-folder', { folder: folder }, config).then(res => {
       console.log(res)
       getFolders()
-    }).catch(err => {
-      console.log(err.response)
+    }).catch(() => {
       navigate('/login')
     })
   }
