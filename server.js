@@ -201,6 +201,7 @@ app.get('/folders', (req, res) => {
         return res.status(401).json(err)
     }
 })
+console.log('FILE.wav'.toLocaleLowerCase())
 
 app.post('/delete', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
@@ -212,7 +213,7 @@ app.post('/delete', (req, res) => {
     db.delete().from('files').where('id', '=', id).then(msg => {
         res.json("deleted")
     })
-    fs.unlink(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file : filesPathOnServer + file, (err) => {
+    fs.unlink(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file.toLowerCase() : filesPathOnServer + file.toLowerCase(), (err) => {
         if (err) return err;
         console.log("file deleted")
     })
