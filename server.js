@@ -24,7 +24,7 @@ const db = knex({
 
 // /files folder
 const filesPathOnServer = path.join(__dirname, '..', '..', '..', '/files/')
-const filesPathOnTest = '/files'
+const filesPathOnTest = path.join(__dirname, '..', '/files/')
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -47,7 +47,7 @@ const getTokenFrom = request => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.env.ENVIRONMENT === 'test' ?  'files': filesPathOnServer)
+        cb(null, process.env.ENVIRONMENT === 'test' ?  filesPathOnTest: filesPathOnServer)
     },
     filename: (req, file, cb) => {
         const fileName = file.originalname.toLowerCase();
@@ -109,9 +109,9 @@ app.get('/filenames', (req, res) => {
 })
 
 
-app.get('/files', (req, res) => {
-    let { filename } = req.body;
-    res.sendFile(filesPathOnServer + filename)
+app.get('/files/:filename(*)', (req, res) => {
+    let filename = req.params.filename;
+    res.sendFile(process.env.ENVIRONMENT === 'test' ?  filesPathOnTest + filename : filesPathOnServer + filename)
 })
 
 /* app.get('/allfiles', (req, res) => {

@@ -62,7 +62,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                     return (
                         <div key={file.id} className="fileRow">
                             <p id="file-date">{file.file}</p>
-                            <audio controls src={src + file.file}></audio>
+                            <audio controls src={src + file.file.toLowerCase()}></audio>
                             <p id="file-date">{date}</p>
                             <button onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
                         </div>
