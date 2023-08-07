@@ -23,7 +23,7 @@ const db = knex({
 });
 
 // /files folder
-const filesPathOnServer = path.join(__dirname, '..', '..', '..', '/files')
+const filesPathOnServer = path.join(__dirname, '..', '..', '..', '/files/')
 const filesPathOnTest = '/files'
 
 app.use(cors());
@@ -109,22 +109,18 @@ app.get('/filenames', (req, res) => {
 })
 
 
-app.post('/files', (req, res) => {
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.username) {
-        return res.status(401).json({ error: 'token invalid' })
-    }
+app.get('/files', (req, res) => {
     let { filename } = req.body;
-    res.sendFile(__dirname + '/files/' + filename)
+    res.sendFile(filesPathOnServer + filename)
 })
 
-app.get('/allfiles', (req, res) => {
+/* app.get('/allfiles', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
     if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     res.sendFile(_dirname + '/files/')
-})
+}) */
 
 
 app.get('/download/:filename(*)', (req, res) => {
