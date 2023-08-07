@@ -24,17 +24,17 @@ const db = knex({
 
 // /files folder
 const filesPathOnServer = path.join(__dirname, '..', '..', '..', '/files')
+const filesPathOnTest = '/files'
 
 app.use(cors());
 app.use(bodyParser.json());
 if (process.env.ENVIRONMENT === 'test') {
-    app.use('/files', express.static('files'));
+    app.use(filesPathOnTest, express.static('files'));
 } else {
     app.use(filesPathOnServer, express.static('files'));
 }
 
 app.use(express.static('./frontend/fileserver/build'));
-
 
 
 const getTokenFrom = request => {
@@ -47,10 +47,9 @@ const getTokenFrom = request => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'files')
+        cb(null, process.env.ENVIRONMENT === 'test' ?  'files': filesPathOnServer)
     },
     filename: (req, file, cb) => {
-        const date = new Date();
         const fileName = file.originalname.toLowerCase();
         cb(null, fileName)
     }
@@ -209,15 +208,16 @@ app.get('/folders', (req, res) => {
 
 app.post('/delete', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
+    if (!decodedToken.username) {
         return res.status(401).json({ error: 'token invalid' })
     }
     let { file, id } = req.body;
+    console.log('FILE', file, 'ID: ', id)
     db.delete().from('files').where('id', '=', id).then(msg => {
         res.json("deleted")
     })
     fs.unlink(__dirname + '/files/' + file, (err) => {
-        if (err) throw err;
+        if (err) return err;
         console.log("file deleted")
     })
 })
@@ -235,11 +235,19 @@ app.post('/deletefolder', (req, res) => {
 })
 
 app.get('/disk', (req, res) => {
-    checkDiskSpace('/dev/vda1').then((diskSpace) => {
-        return res.status(200).json(diskSpace)
-    }).catch(err => {
-        return res.status(500).json(err)
-    })
+    if (process.env.ENVIRONMENT === 'test') {
+        checkDiskSpace('C:/Users').then((diskSpace) => {
+            return res.status(200).json(diskSpace)
+        }).catch(err => {
+            return res.status(500).json(err)
+        })
+    } else {
+        checkDiskSpace('/dev/vda1').then((diskSpace) => {
+            return res.status(200).json(diskSpace)
+        }).catch(err => {
+            return res.status(500).json(err)
+        })
+    }
 })
 
 app.listen(process.env.port, () => console.log("server started on port", process.env.port))

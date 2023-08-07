@@ -26,6 +26,7 @@ const FoldersView = ({ folders, createFolder,deleteSelectedFolder }: foldersProp
             setFolderName('')
         } else {
             createFolder(folderName)
+            setFolderName('')
         }
     }
 

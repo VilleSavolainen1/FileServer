@@ -45,6 +45,9 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
         uploadManyFiles(data, token).then(res => {
             console.log(res)
             isLoading(false)
+        }).catch(err => {
+            console.log(err)
+            isLoading(false)
         })
     }
 

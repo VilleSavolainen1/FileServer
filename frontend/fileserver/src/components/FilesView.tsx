@@ -14,9 +14,10 @@ interface filesProps {
     isLoading: (value: boolean) => void
     logOut: () => void
     diskSpace: diskSpace
+    deleteSelectedFile: (filename: string, id: string) => void
 }
 
-const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
+const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }: filesProps) => {
     const [fileNames, setFileNames] = React.useState([])
     const [loading, setLoading] = React.useState(false)
     const name = useParams().name
@@ -34,6 +35,19 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
         setLoading(false)
     }
 
+    const onPressDeleteFile = (filename: string, id: string) => {
+        console.log('FILENAME: ', filename, 'ID: ', id)
+        let ask = window.confirm("Poistetaanko " + filename + "?");
+        if (ask) {
+            try {
+                deleteSelectedFile(filename, id)
+                getCurrentFolderFileNames()
+            } catch (err) {
+                console.log(err)
+            }
+        }
+    }
+
     React.useEffect(() => {
         getCurrentFolderFileNames()
     }, [])
@@ -41,6 +55,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
     const renderFiles = () => {
         if (fileNames.length) {
             return fileNames.map((file: any) => {
+                console.log('FILE: ', file)
                 let fileType = file.file.split(".")[1]; // .txt .wav ....
                 let date = new Date(file.date).toLocaleDateString('fi-fi')
                 if (fileType === 'wav') {
@@ -49,6 +64,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
                             <p id="file-date">{file.file}</p>
                             <audio controls src={src + file.file}></audio>
                             <p id="file-date">{date}</p>
+                            <button onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
                         </div>
                     )
                 } else {
@@ -56,6 +72,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace }: filesProps) => {
                         <div key={file.id} className="fileRow">
                             <p id="file-date">{file.file}</p>
                             <p id="file-date">{date}</p>
+                            <button onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
                         </div>
                     )
                 }
