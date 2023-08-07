@@ -212,7 +212,7 @@ app.post('/delete', (req, res) => {
     db.delete().from('files').where('id', '=', id).then(msg => {
         res.json("deleted")
     })
-    fs.unlink(__dirname + '/files/' + file, (err) => {
+    fs.unlink(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file : filesPathOnServer + file, (err) => {
         if (err) return err;
         console.log("file deleted")
     })
