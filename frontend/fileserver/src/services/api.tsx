@@ -60,3 +60,17 @@ export const getFileNames = async (token: any) => {
       return res
 }
 
+export const deleteFolder = async (foldername: string, token: any) => {
+   const config = {
+      headers: {
+         "Content-type": "application/json",
+         "Authorization": `Bearer ${token}`,
+      },
+   };
+   axios.post('/deletefolder', {folder: foldername}, config).then(res => {
+      return res
+   }).catch(err => {
+      return err
+   })
+}
+

@@ -7,10 +7,11 @@ import { Folder } from '../types';
 interface foldersProps {
     folders: Folder[]
     createFolder: (value: string) => void
+    deleteSelectedFolder: (foldername: string) => void
 }
 
 
-const FoldersView = ({ folders, createFolder }: foldersProps) => {
+const FoldersView = ({ folders, createFolder,deleteSelectedFolder }: foldersProps) => {
 
     const [folderName, setFolderName] = React.useState('')
 
@@ -28,6 +29,13 @@ const FoldersView = ({ folders, createFolder }: foldersProps) => {
         }
     }
 
+    const onPressDeleteFolder = (foldername: string) => {
+        let ask = window.confirm("Poistetaanko " + folderName + "?");
+        if (ask) {
+            deleteSelectedFolder(foldername)
+        }
+    }
+
     const renderFolders = () => {
         if (folders && folders.length > 0) {
             return folders.map(fldr => {
@@ -36,6 +44,7 @@ const FoldersView = ({ folders, createFolder }: foldersProps) => {
                         <div className="singleFolder">
                             <img className="folderImage" src={folderIcon} />
                             <Link className="folderName" to={`folders/${fldr.name}`}>{fldr.name}</Link>
+                            <button onClick={() => onPressDeleteFolder(fldr.name)}>Poista</button>
                         </div>
                         <div className="divider"></div>
                     </div>

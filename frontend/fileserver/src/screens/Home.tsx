@@ -11,9 +11,10 @@ interface homeProps {
     logOut: () => void
     diskSpace: diskSpace
     createFolder: (value: string) => void
+    deleteSelectedFolder: (foldername: string) => void
 }
 
-const Home = ({ folders, logOut, diskSpace, createFolder }: homeProps) => {
+const Home = ({ folders, logOut, diskSpace, createFolder,deleteSelectedFolder }: homeProps) => {
 
     const navigate = useNavigate()
 
@@ -27,7 +28,7 @@ const Home = ({ folders, logOut, diskSpace, createFolder }: homeProps) => {
     return (
         <div className="main">
             <TopBar signOut={logOut} diskSpace={diskSpace} />
-            <FoldersView folders={folders} createFolder={createFolder} />
+            <FoldersView folders={folders} createFolder={createFolder} deleteSelectedFolder={deleteSelectedFolder}/>
         </div>
     )
 }

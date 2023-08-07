@@ -13,6 +13,7 @@ import axios from 'axios';
 import { Folder, diskSpace } from './types';
 import Loader from './components/Loader';
 import { create } from 'domain';
+import { deleteFolder } from './services';
 
 type State = {
   folders: Folder
@@ -143,6 +144,13 @@ function App() {
     })
   }
 
+  const deleteSelectedFolder = (foldername: string) => {
+    const token = getValueForKey('access_token')
+    deleteFolder(foldername, token).then(() => {
+      getFolders()
+    })
+  }
+
   useEffect(() => {
     if (loggedIn) {
       getFileSpace()
@@ -163,7 +171,7 @@ function App() {
     return (
       <div>
           <Routes>
-            <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} />} />
+            <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} deleteSelectedFolder={deleteSelectedFolder} />} />
             <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} />} />
             <Route path="/folders/:name" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} />} />
           </Routes>
