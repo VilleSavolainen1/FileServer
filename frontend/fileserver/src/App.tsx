@@ -53,6 +53,7 @@ function App() {
 
   const logOut = () => {
     deleteValueForKey('access_token')
+    setLoggedIn(false)
     navigate('/login')
   }
 
