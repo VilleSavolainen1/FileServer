@@ -13,7 +13,7 @@ import axios from 'axios';
 import { Folder, diskSpace } from './types';
 import Loader from './components/Loader';
 import { create } from 'domain';
-import { deleteFile, deleteFolder } from './services';
+import { deleteFile, deleteFolder, getFileNames } from './services';
 
 type State = {
   folders: Folder
@@ -21,7 +21,7 @@ type State = {
 }
 
 const initialState: State = {
-  folders: { id: 0, name: '' },
+  folders: { name: '', id: 0 },
   diskSpace: {
     free: 0, size: 0,
     diskPath: ''
@@ -96,6 +96,7 @@ function App() {
   }, [])
 
   const getFolders = () => {
+    setLoading(true)
     const token = getValueForKey('access_token')
     const config = {
       headers: {
@@ -107,6 +108,7 @@ function App() {
       setFolders(res.data)
       setLoading(false)
     }).catch(() => {
+      setLoggedIn(false)
       setLoading(false)
       navigate('/login')
     })
@@ -129,25 +131,46 @@ function App() {
   }
 
   const createFolder = (folder: string) => {
-    const token = getValueForKey('access_token')
-    const config = {
-      headers: {
-        "Content-type": "application/json",
-        "Authorization": `Bearer ${token}`,
-      },
+    if (folders.some(fldr => fldr.name === folder)) {
+      return window.alert('Kansio on jo olemassa')
+    } else {
+      const token = getValueForKey('access_token')
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+      }
+      axios.post('/create-folder', { folder: folder }, config).then(res => {
+        console.log(res)
+        getFolders()
+      }).catch(() => {
+        navigate('/login')
+      })
     }
-    axios.post('/create-folder', { folder: folder }, config).then(res => {
-      console.log(res)
-      getFolders()
-    }).catch(() => {
-      navigate('/login')
-    })
+  }
+
+
+  const getCurrentFolderFileNames = async (foldername: string) => {
+    setLoading(true)
+    const token = getValueForKey('access_token')
+    const files = await getFileNames(token)
+    const data = files.data
+    const currentFolderFiles = data.filter((file: any) => file.folder === foldername)
+    setLoading(false)
+    return currentFolderFiles
   }
 
   const deleteSelectedFolder = (foldername: string) => {
     const token = getValueForKey('access_token')
-    deleteFolder(foldername, token).then(() => {
-      getFolders()
+    getCurrentFolderFileNames(foldername).then(files => {
+      if (files.length > 0) {
+        window.alert('Kansio ei ole tyhjä')
+      } else {
+        deleteFolder(foldername, token).then(() => {
+          getFolders()
+        })
+      }
     })
   }
 
@@ -178,13 +201,11 @@ function App() {
     )
   } else {
     return (
-      <div>
-          <Routes>
-            <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} deleteSelectedFolder={deleteSelectedFolder} />} />
-            <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} />} />
-            <Route path="/folders/:name" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} deleteSelectedFile={deleteSelectedFile} />} />
-          </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} deleteSelectedFolder={deleteSelectedFolder} />} />
+        <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} />} />
+        <Route path="/:foldername" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} deleteSelectedFile={deleteSelectedFile} />} />
+      </Routes>
     )
   }
 }

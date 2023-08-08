@@ -1,16 +1,19 @@
 import React, { useRef } from 'react'
 import TopBar from './TopBar';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Folder, diskSpace } from '../types';
 import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
-import { emptyIcon } from '../images';
+import { arrowBackIcon, emptyIcon } from '../images';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
+import 'react-h5-audio-player/lib/styles.css';
+import axios from 'axios';
 
 
 interface filesProps {
-    folders: Folder[]
+    folders: Folder[] | undefined
     isLoading: (value: boolean) => void
     logOut: () => void
     diskSpace: diskSpace
@@ -20,7 +23,8 @@ interface filesProps {
 const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }: filesProps) => {
     const [fileNames, setFileNames] = React.useState([])
     const [loading, setLoading] = React.useState(false)
-    const name = useParams().name
+    const name = useParams().foldername
+    const navigate = useNavigate();
 
     const src = '/files/'
 
@@ -36,7 +40,6 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
     }
 
     const onPressDeleteFile = (filename: string, id: string) => {
-        console.log('FILENAME: ', filename, 'ID: ', id)
         let ask = window.confirm("Poistetaanko " + filename + "?");
         if (ask) {
             try {
@@ -53,18 +56,20 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
     }, [])
 
     const renderFiles = () => {
-        if (fileNames.length) {
+        if (fileNames.length || fileNames === undefined) {
             return fileNames.map((file: any) => {
-                console.log('FILE: ', file)
                 let fileType = file.file.split(".")[1]; // .txt .wav ....
-                let date = new Date(file.date).toLocaleDateString('fi-fi')
-                if (fileType === 'wav') {
+                let date = new Date(file.date).toLocaleDateString('fi-Fi')
+                if (fileType === 'wav' || fileType === 'mp3') {
                     return (
                         <div key={file.id} className="fileRow">
                             <p id="file-date">{file.file}</p>
-                            <audio controls src={src + file.file.toLowerCase()}></audio>
+                            <AudioPlayer src={src + file.file.toLowerCase()} showSkipControls={false} showJumpControls={false}
+                                customAdditionalControls={[RHAP_UI.CURRENT_LEFT_TIME]} customProgressBarSection={[RHAP_UI.PROGRESS_BAR]} customVolumeControls={[]}
+                                style={{ width: '200px', background: 'transparent' }} layout="horizontal" />
                             <p id="file-date">{date}</p>
-                            <button onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
+                            <a href={src + file.file.toLowerCase()} download target="_self"><button className="downloadButton">Lataa</button></a>
+                            <button className="deleteButton" onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
                         </div>
                     )
                 } else {
@@ -93,14 +98,17 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
             <TopBar signOut={logOut} diskSpace={diskSpace} />
             {loading ? <Loader /> :
                 <div className="foldersView">
+                    <div className="navigation">
+                        <div className="arrowBack">
+                            <img src={arrowBackIcon} onClick={() => navigate(-1)} alt="arrow" style={{ width: '30px', cursor: 'pointer' }} />
+                        </div>
+                    </div>
                     <div className="foldersContent">
                         <div className="foldersHeader">
-                            <h2 style={{ color: '#ffffff' }}>{name}</h2>
+                            <h1 style={{ color: '#ffffff', marginBottom: '40px' }}>{name}</h1>
+                            <UploadFile name={name} isLoading={isLoading} />
                         </div>
                         <div className="filesView">
-                        </div>
-                        <UploadFile name={name} isLoading={isLoading} />
-                        <div className="foldersCard">
                             {renderFiles()}
                         </div>
                     </div>

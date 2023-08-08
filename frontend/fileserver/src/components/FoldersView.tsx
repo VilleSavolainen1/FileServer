@@ -11,7 +11,7 @@ interface foldersProps {
 }
 
 
-const FoldersView = ({ folders, createFolder,deleteSelectedFolder }: foldersProps) => {
+const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersProps) => {
 
     const [folderName, setFolderName] = React.useState('')
 
@@ -43,9 +43,11 @@ const FoldersView = ({ folders, createFolder,deleteSelectedFolder }: foldersProp
                 return (
                     <div key={fldr.id}>
                         <div className="singleFolder">
-                            <img className="folderImage" src={folderIcon} />
-                            <Link className="folderName" to={`folders/${fldr.name}`}>{fldr.name}</Link>
-                            <button onClick={() => onPressDeleteFolder(fldr.name)}>Poista</button>
+                            <div className="folderNameSection">
+                                <img className="folderImage" src={folderIcon} />
+                                <Link className="folderName" to={`${fldr.name}`}>{fldr.name}</Link>
+                            </div>
+                            <button className="deleteButton" onClick={() => onPressDeleteFolder(fldr.name)}>Poista</button>
                         </div>
                         <div className="divider"></div>
                     </div>
@@ -63,8 +65,8 @@ const FoldersView = ({ folders, createFolder,deleteSelectedFolder }: foldersProp
 
     return (
         <div className="foldersView">
-            <div className="foldersContent">
-                <div className="foldersHeader">
+            <div className="folderContent">
+                <div className="folderHeader">
                     <h2 style={{ color: '#ffffff' }}>Kansiot</h2>
                 </div>
                 <div className="createFolderForm">

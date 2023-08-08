@@ -47,7 +47,7 @@ const getTokenFrom = request => {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.env.ENVIRONMENT === 'test' ?  filesPathOnTest: filesPathOnServer)
+        cb(null, process.env.ENVIRONMENT === 'test' ? filesPathOnTest : filesPathOnServer)
     },
     filename: (req, file, cb) => {
         const fileName = file.originalname.toLowerCase();
@@ -111,7 +111,7 @@ app.get('/filenames', (req, res) => {
 
 app.get('/files/:filename(*)', (req, res) => {
     let filename = req.params.filename;
-    res.sendFile(process.env.ENVIRONMENT === 'test' ?  filesPathOnTest + filename : filesPathOnServer + filename)
+    res.download(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + filename : filesPathOnServer + filename)
 })
 
 /* app.get('/allfiles', (req, res) => {
@@ -124,12 +124,9 @@ app.get('/files/:filename(*)', (req, res) => {
 
 
 app.get('/download/:filename(*)', (req, res) => {
-    const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-    if (!decodedToken.id) {
-        return res.status(401).json({ error: 'token invalid' })
-    }
+    console.log('FILENAME: ', filename)
     let file = req.params.filename;
-    res.download(__dirname + '/files/' + file, file)
+    res.download(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file : filesPathOnServer + file, file)
 })
 
 
@@ -201,7 +198,7 @@ app.get('/folders', (req, res) => {
         return res.status(401).json(err)
     }
 })
-console.log('FILE.wav'.toLocaleLowerCase())
+
 
 app.post('/delete', (req, res) => {
     const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
@@ -210,12 +207,15 @@ app.post('/delete', (req, res) => {
     }
     let { file, id } = req.body;
     console.log('FILE', file, 'ID: ', id)
-    db.delete().from('files').where('id', '=', id).then(msg => {
+    db.delete().from('files').where('id', '=', id).then(async msg => {
         res.json("deleted")
-    })
-    fs.unlink(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file.toLowerCase() : filesPathOnServer + file.toLowerCase(), (err) => {
-        if (err) return err;
-        console.log("file deleted")
+        try {
+            await fs.unlink(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file.toLowerCase() : filesPathOnServer + file.toLowerCase())
+            res.status(200)
+        } catch (err) {
+            console.log(err)
+            res.status(500)
+        }
     })
 })
 

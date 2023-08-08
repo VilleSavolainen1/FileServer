@@ -27,7 +27,6 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
         e.preventDefault();
         const token = getValueForKey('access_token')
         const data = new FormData();
-
         for (let i = 0; i < files.length; i++) {
             console.log(files[i])
             if (files[i].size > 137000000) {
@@ -39,7 +38,6 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
             saveFileName(files[i].name, name, token).then(res => {
                 console.log(res)
             })
-
             data.append(`files`, files[i])
         }
         uploadManyFiles(data, token).then(res => {
@@ -54,6 +52,8 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
     return (
         <div className="uploadFileForm">
             <form onSubmit={uploadFiles}>
+                <span>Lisää tiedostoja:</span>
+                <div className="blank"></div>
                 <input type="file" multiple onChange={uploadFileHandler} />
                 <button type='submit'>Lähetä</button>
                 {!fileSize && <p style={{ color: 'red' }}>Tiedoston koko ylittyy!!</p>}
