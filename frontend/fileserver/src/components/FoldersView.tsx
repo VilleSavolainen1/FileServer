@@ -41,7 +41,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
         if (folders && folders.length > 0) {
             return folders.map(fldr => {
                 return (
-                    <div key={fldr.id}>
+                    <div key={fldr.id} className="folder">
                         <div className="singleFolder">
                             <div className="folderNameSection">
                                 <img className="folderImage" src={folderIcon} />
@@ -65,7 +65,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
 
     return (
         <div className="foldersView">
-            <div className="folderContent">
+            <div className="foldersContent">
                 <div className="folderHeader">
                     <h2 style={{ color: '#ffffff' }}>Kansiot</h2>
                 </div>
