@@ -204,7 +204,7 @@ function App() {
     return (
       <Routes>
         <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} deleteSelectedFolder={deleteSelectedFolder} />} />
-        <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} />} />
+        <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />} />
         <Route path="/:foldername" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} deleteSelectedFile={deleteSelectedFile} />} />
       </Routes>
     )

@@ -5,9 +5,10 @@ import axios from 'axios';
 
 interface LoginProps {
     setHasLoggedIn: (value: boolean) => void
+    isLoading: (value: boolean) => void
 }
 
-const Login = ({setHasLoggedIn}: LoginProps) => {
+const Login = ({setHasLoggedIn, isLoading}: LoginProps) => {
 
     const [username, setUserName] = React.useState('')
     const [password, setPassword] = React.useState('')
@@ -16,6 +17,7 @@ const Login = ({setHasLoggedIn}: LoginProps) => {
 
 
     const signInUser = async () => {
+        isLoading(true)
         axios.post('/signin', { username: username, password: password }).then(res => {
             if (res.status === 200) {
                 storeValueForKey('access_token', res.data.token)
@@ -23,6 +25,7 @@ const Login = ({setHasLoggedIn}: LoginProps) => {
                 navigate('/')
             }
         }).catch(err => {
+            isLoading(false)
             console.log(err)
             setMessage('Väärä käyttäjänimi tai salasana')
             setUserName('')
