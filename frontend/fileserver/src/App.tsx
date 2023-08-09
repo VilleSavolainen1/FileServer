@@ -8,11 +8,9 @@ import Home from './screens/Home';
 import Login from './screens/Login';
 import { deleteValueForKey, getValueForKey } from './utils';
 import FilesView from './components/FilesView';
-import TopBar from './components/TopBar';
 import axios from 'axios';
 import { Folder, diskSpace } from './types';
 import Loader from './components/Loader';
-import { create } from 'domain';
 import { deleteFile, deleteFolder, getFileNames } from './services';
 
 type State = {
@@ -193,11 +191,7 @@ function App() {
   if (loading) {
     return (
       <div className="main">
-        <div className="foldersView">
-          <div className="foldersContent">
-            <Loader />
-          </div>
-        </div>
+          <Loader />
       </div>
     )
   } else {

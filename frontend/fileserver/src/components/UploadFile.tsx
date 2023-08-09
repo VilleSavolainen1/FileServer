@@ -52,7 +52,7 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
     return (
         <div className="uploadFileForm">
             <form onSubmit={uploadFiles}>
-                <span>Lisää tiedostoja:</span>
+                <p style={{fontSize: '14px'}}>Lisää tiedostoja:</p>
                 <div className="blank"></div>
                 <input type="file" multiple onChange={uploadFileHandler} />
                 <button type='submit'>Lähetä</button>

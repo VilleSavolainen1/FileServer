@@ -64,7 +64,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                 if (fileType === 'wav' || fileType === 'mp3') {
                     return (
                         <div key={file.id} className="fileRow">
-                            <p id="file-date">{file.file}</p>
+                            <p id="file-name">{file.file}</p>
                             {selectedFile === src + file.file.toLowerCase() ?
                                 <img alt="pause" src={pauseIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile('')}></img>
                                 :
@@ -100,7 +100,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
         <div className="main">
             <TopBar signOut={logOut} diskSpace={diskSpace} />
             {loading ? <Loader /> :
-                <div className="filesView">
+                <div className="allFilesView">
                     <div className="navigation">
                         <div className="arrowBack">
                             <img src={arrowBackIcon} onClick={() => navigate(-1)} alt="arrow" style={{ width: '30px', cursor: 'pointer' }} />

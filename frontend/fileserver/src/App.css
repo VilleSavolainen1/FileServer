@@ -16,10 +16,6 @@
   height: 100vh;
   width: 100vw;
   background-color: #0d1117;
-  overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  overflow-y: auto;
 }
 
 .topBar {
@@ -32,6 +28,7 @@
   height: 60px;
   align-items: center;
   border-bottom: 1px solid #101a29;
+  z-index: 1;
 }
 
 .topBarContent {
@@ -186,7 +183,9 @@
 }
 
 .navigation {
+  position: absolute;
   width: 100%;
+  top: 60px;
 }
 
 .arrowBack {
@@ -247,7 +246,10 @@
 }
 
 .loader {
-  margin-top: 400px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   align-items: center;
   text-align: center;
 }
@@ -273,45 +275,62 @@
   max-width: 98vw;
 }
 
+.allFilesView {
+  margin-top: 40px;
+  height: 100%;
+}
+
 .filesView {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   margin-top: 50px;
+  margin-bottom: 100px;
+  overflow: auto;
+  height: 400px;
 }
 
 #file-date {
+  color: rgb(122, 122, 122);
+  width: 50px;
+  margin-right: 5px;
+  font-size: 12px;
+  overflow: hidden;
+  border-right: 1px solid rgb(44, 44, 44);
+}
+
+#file-name {
   color: white;
-  width: 100px;
+  width: 110px;
   font-size: 12px;
   overflow: hidden;
   border-right: 1px solid rgb(44, 44, 44);
 }
 
 .deleteButton {
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   padding: 5px;
-  margin: 5px;
+  margin-left: 5px;
+  margin-right: 7px;
   border: none;
   background: transparent;
   border-radius: 3px;
   height: 30px;
-  width: 60px;
+  width: 40px;
   color: #92abcf;
 }
 
 .downloadButton {
-  font-size: 15px;
+  font-size: 14px;
   cursor: pointer;
   padding: 5px;
-  margin: 5px;
+  margin-left: 5px;
   border: none;
   background: transparent;
   border-radius: 3px;
   height: 30px;
-  width: 60px;
+  width: 40px;
   color: #92abcf;
 }
 
