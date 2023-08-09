@@ -1,7 +1,4 @@
-import React from 'react'
 import { logoutIcon } from '../images'
-import axios from 'axios'
-import { DiskSpace } from 'check-disk-space'
 import { diskSpace } from '../types'
 import ProgressBar from "@ramonak/react-progress-bar"
 

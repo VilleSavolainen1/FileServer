@@ -6,10 +6,11 @@ import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
-import { arrowBackIcon, emptyIcon } from '../images';
+import { arrowBackIcon, emptyIcon, pauseIcon, playIcon } from '../images';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
 import axios from 'axios';
+import BottomPlayer from './BottomPlayer';
 
 
 interface filesProps {
@@ -22,6 +23,7 @@ interface filesProps {
 
 const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }: filesProps) => {
     const [fileNames, setFileNames] = React.useState([])
+    const [selectedFile, setSelectedFile] = React.useState('')
     const [loading, setLoading] = React.useState(false)
     const name = useParams().foldername
     const navigate = useNavigate();
@@ -64,9 +66,11 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                     return (
                         <div key={file.id} className="fileRow">
                             <p id="file-date">{file.file}</p>
-                            <AudioPlayer src={src + file.file.toLowerCase()} showSkipControls={false} showJumpControls={false}
-                                customAdditionalControls={[RHAP_UI.CURRENT_LEFT_TIME]} customProgressBarSection={[RHAP_UI.PROGRESS_BAR]} customVolumeControls={[]}
-                                style={{ width: '200px', background: 'transparent' }} layout="horizontal" />
+                            {selectedFile === src + file.file.toLowerCase() ?
+                                <img alt="pause" src={pauseIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile('')}></img>
+                                :
+                                <img alt="play" src={playIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile(src + file.file.toLowerCase())} ></img>
+                            }
                             <p id="file-date">{date}</p>
                             <a href={src + file.file.toLowerCase()} download target="_self"><button className="downloadButton">Lataa</button></a>
                             <button className="deleteButton" onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
@@ -112,6 +116,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                             {renderFiles()}
                         </div>
                     </div>
+                    {fileNames.length && <BottomPlayer file={selectedFile} />}
                 </div>}
         </div>
     )
