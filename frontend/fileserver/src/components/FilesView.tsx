@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import TopBar from './TopBar';
 import { useNavigate, useParams } from 'react-router-dom'
 import { Folder, diskSpace } from '../types';
@@ -6,10 +6,8 @@ import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
-import { arrowBackIcon, emptyIcon, pauseIcon, playIcon } from '../images';
-import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
+import { arrowBackIcon, emptyIcon, pauseIcon, playIcon, stopIcon } from '../images';
 import 'react-h5-audio-player/lib/styles.css';
-import axios from 'axios';
 import BottomPlayer from './BottomPlayer';
 
 
@@ -42,6 +40,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
     }
 
     const onPressDeleteFile = (filename: string, id: string) => {
+        setSelectedFile('')
         let ask = window.confirm("Poistetaanko " + filename + "?");
         if (ask) {
             try {

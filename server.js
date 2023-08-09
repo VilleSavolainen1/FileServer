@@ -167,7 +167,7 @@ app.post('/signin', (req, res) => {
                 res.status(500).json("väärin")
             }
         })
-        .catch(err => res.status(400).json(err))
+        .catch(err => res.status(400).json('Väärin'))
 })
 
 

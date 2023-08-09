@@ -11,7 +11,7 @@ const Loader = () => {
 
     return (
         <div className="loader">
-            <p style={{color: 'white'}}>Odota</p>
+            <p style={{color: 'white'}}>Odota...</p>
             <BarLoader
                 color={'#2184FE'}
                 loading={true}
