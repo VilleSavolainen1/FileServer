@@ -47,7 +47,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
                                 <img className="folderImage" src={folderIcon} />
                                 <Link className="folderName" to={`${fldr.name}`}>{fldr.name}</Link>
                             </div>
-                            <button className="deleteButton" onClick={() => onPressDeleteFolder(fldr.name)}>Poista</button>
+                            <button className="deleteButtonButton" onClick={() => onPressDeleteFolder(fldr.name)}>Poista</button>
                         </div>
                         <div className="divider"></div>
                     </div>

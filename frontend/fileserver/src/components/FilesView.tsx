@@ -6,7 +6,7 @@ import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
-import { arrowBackIcon, emptyIcon, pauseIcon, playIcon, stopIcon } from '../images';
+import { arrowBackIcon, downloadIcon, emptyIcon, pauseIcon, playIcon, stopIcon, trashIcon } from '../images';
 import 'react-h5-audio-player/lib/styles.css';
 import BottomPlayer from './BottomPlayer';
 
@@ -71,8 +71,8 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                                 <img alt="play" src={playIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile(src + file.file.toLowerCase())} ></img>
                             }
                             <p id="file-date">{date}</p>
-                            <a href={src + file.file.toLowerCase()} download target="_self"><button className="downloadButton">Lataa</button></a>
-                            <button className="deleteButton" onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
+                            <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
+                            <img alt="trash" className="deleteButton" src={trashIcon} onClick={() => onPressDeleteFile(file.file, file.id)}></img>
                         </div>
                     )
                 } else {

@@ -272,7 +272,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgb(44, 44, 44);
-  max-width: 98vw;
+  width: 500px;
 }
 
 .allFilesView {
@@ -308,6 +308,21 @@
 }
 
 .deleteButton {
+  cursor: pointer;
+  padding: 5px;
+  width: 20px;
+  margin-left: 5px;
+  margin-right: 7px;
+}
+
+.downloadButton {
+  cursor: pointer;
+  width: 25px;
+  padding: 5px;
+  margin-left: 5px;
+}
+
+.deleteButtonButton {
   font-size: 14px;
   cursor: pointer;
   padding: 5px;
@@ -319,19 +334,7 @@
   height: 30px;
   width: 40px;
   color: #92abcf;
-}
 
-.downloadButton {
-  font-size: 14px;
-  cursor: pointer;
-  padding: 5px;
-  margin-left: 5px;
-  border: none;
-  background: transparent;
-  border-radius: 3px;
-  height: 30px;
-  width: 40px;
-  color: #92abcf;
 }
 
 .deleteButton:hover{
@@ -362,5 +365,9 @@
 
   .foldersCard {
     width: 300px;
+  }
+
+  .fileRow {
+    max-width: 90vw;
   }
 }
