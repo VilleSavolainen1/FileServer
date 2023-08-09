@@ -100,7 +100,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
         <div className="main">
             <TopBar signOut={logOut} diskSpace={diskSpace} />
             {loading ? <Loader /> :
-                <div className="foldersView">
+                <div className="filesView">
                     <div className="navigation">
                         <div className="arrowBack">
                             <img src={arrowBackIcon} onClick={() => navigate(-1)} alt="arrow" style={{ width: '30px', cursor: 'pointer' }} />
@@ -115,8 +115,8 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                             {renderFiles()}
                         </div>
                     </div>
-                    {fileNames.length && <BottomPlayer file={selectedFile} />}
                 </div>}
+            {fileNames.length && <BottomPlayer file={selectedFile} />}
         </div>
     )
 }

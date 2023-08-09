@@ -5,9 +5,26 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow-y: auto;
+  background-color: #0d1117;
+}
+
+body::-webkit-scrollbar{
+  display: none;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+*{
+  -ms-overflow-style: none;
+}
+
+html {
+  scrollbar-width: none;
 }

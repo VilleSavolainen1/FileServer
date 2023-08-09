@@ -16,7 +16,7 @@ const BottomPlayer = ({ file }: playerProps) => {
         <div className="bottomPlayer">
             <AudioPlayer src={file} showSkipControls={false} showJumpControls={true}
                 customAdditionalControls={[RHAP_UI.CURRENT_LEFT_TIME]} customProgressBarSection={[RHAP_UI.PROGRESS_BAR]} customVolumeControls={[]}
-                 layout="horizontal" />
+                layout="horizontal" />
         </div>
     )
 }

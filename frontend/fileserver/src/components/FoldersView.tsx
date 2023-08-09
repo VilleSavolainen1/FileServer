@@ -66,9 +66,6 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
     return (
         <div className="foldersView">
             <div className="foldersContent">
-                <div className="folderHeader">
-                    <h2 style={{ color: '#ffffff' }}>Kansiot</h2>
-                </div>
                 <div className="createFolderForm">
                     <input id="foldernameinput" type="text" name="username" placeholder="Uusi kansio" onChange={onChangeFolderName}></input>
                     <button onClick={() => onPressCreateFolder()} >Luo</button>
