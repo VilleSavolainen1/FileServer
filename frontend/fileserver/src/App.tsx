@@ -52,6 +52,7 @@ function App() {
   const logOut = () => {
     deleteValueForKey('access_token')
     setLoggedIn(false)
+    navigate('/')
   }
 
   const setHasLoggedIn = (value: boolean) => {

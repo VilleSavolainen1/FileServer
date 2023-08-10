@@ -53,8 +53,14 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
     }
 
     React.useEffect(() => {
-        getCurrentFolderFileNames()
-    }, [])
+        const token = getValueForKey('access_token')
+        if (token) {
+            getCurrentFolderFileNames()
+        } else {
+            navigate('/')
+        }
+      }, [])
+
 
     const renderFiles = () => {
         if (fileNames.length || fileNames === undefined) {
