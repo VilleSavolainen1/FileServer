@@ -31,7 +31,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
     }
 
     const onPressDeleteFolder = (foldername: string) => {
-        let ask = window.confirm("Poistetaanko " + folderName + "?");
+        let ask = window.confirm("Poistetaanko " + foldername + "?");
         if (ask) {
             deleteSelectedFolder(foldername)
         }

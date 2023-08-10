@@ -52,7 +52,6 @@ function App() {
   const logOut = () => {
     deleteValueForKey('access_token')
     setLoggedIn(false)
-    navigate('/login')
   }
 
   const setHasLoggedIn = (value: boolean) => {
@@ -107,9 +106,8 @@ function App() {
       setFolders(res.data)
       setLoading(false)
     }).catch(() => {
-      setLoggedIn(false)
+      logOut()
       setLoading(false)
-      navigate('/login')
     })
   }
 
@@ -144,7 +142,7 @@ function App() {
         console.log(res)
         getFolders()
       }).catch(() => {
-        navigate('/login')
+        logOut()
       })
     }
   }
@@ -191,14 +189,22 @@ function App() {
   if (loading) {
     return (
       <div className="main">
-          <Loader />
+        <Loader />
       </div>
     )
   } else {
     return (
       <Routes>
-        <Route path="/" element={<Home folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} createFolder={createFolder} deleteSelectedFolder={deleteSelectedFolder} />} />
-        <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />} />
+        <Route path="/" element={loggedIn ?
+          <Home folders={folders}
+            isLoading={isLoading}
+            logOut={logOut}
+            diskSpace={diskSpace}
+            createFolder={createFolder}
+            deleteSelectedFolder={deleteSelectedFolder} /> :
+          <Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />
+        } />
+        {/* <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />} /> */}
         <Route path="/:foldername" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} deleteSelectedFile={deleteSelectedFile} />} />
       </Routes>
     )
