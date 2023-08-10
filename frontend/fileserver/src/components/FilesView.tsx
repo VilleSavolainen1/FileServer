@@ -59,7 +59,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
         } else {
             navigate('/')
         }
-      }, [])
+    }, [])
 
 
     const renderFiles = () => {
@@ -84,9 +84,11 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                 } else {
                     return (
                         <div key={file.id} className="fileRow">
-                            <p id="file-date">{file.file}</p>
+                            <p id="file-name">{file.file}</p>
+                            <div style={{width: '55px'}}></div>
                             <p id="file-date">{date}</p>
-                            <button onClick={() => onPressDeleteFile(file.file, file.id)}>Poista</button>
+                            <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
+                            <img alt="trash" className="deleteButton" src={trashIcon} onClick={() => onPressDeleteFile(file.file, file.id)}></img>
                         </div>
                     )
                 }
