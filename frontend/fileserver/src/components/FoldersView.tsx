@@ -17,11 +17,9 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
 
     const onChangeFolderName = (e: any) => {
         setFolderName(e.target.value)
-        console.log(folderName)
     }
 
     const onPressCreateFolder = () => {
-        console.log(folderName.length)
         if (folderName.length === 0) {
             setFolderName('')
         } else {
@@ -31,7 +29,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
     }
 
     const onPressDeleteFolder = (foldername: string) => {
-        let ask = window.confirm("Poistetaanko " + foldername + "?");
+        let ask = window.confirm("Poistetaanko kansio " + foldername + "?");
         if (ask) {
             deleteSelectedFolder(foldername)
         }
@@ -44,7 +42,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
                     <div key={fldr.id} className="folder">
                         <div className="singleFolder">
                             <div className="folderNameSection">
-                                <img className="folderImage" src={folderIcon} />
+                                <img alt="folder" className="folderImage" src={folderIcon} />
                                 <Link className="folderName" to={`${fldr.name}`}>{fldr.name}</Link>
                             </div>
                             <button className="deleteButtonButton" onClick={() => onPressDeleteFolder(fldr.name)}>Poista</button>
@@ -56,7 +54,7 @@ const FoldersView = ({ folders, createFolder, deleteSelectedFolder }: foldersPro
         } else {
             return (
                 <div className="emptyFolder">
-                    <img src={emptyIcon}></img>
+                    <img alt="empty" src={emptyIcon}></img>
                     <h3 style={{ color: '#ffffff' }}>Tyhjä</h3>
                 </div>
             )

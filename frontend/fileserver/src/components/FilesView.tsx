@@ -6,7 +6,7 @@ import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
-import { arrowBackIcon, downloadIcon, emptyIcon, pauseIcon, playIcon, stopIcon, trashIcon } from '../images';
+import { arrowBackIcon, downloadIcon, emptyIcon, pauseIcon, playIcon, trashIcon } from '../images';
 import 'react-h5-audio-player/lib/styles.css';
 import BottomPlayer from './BottomPlayer';
 
@@ -19,7 +19,7 @@ interface filesProps {
     deleteSelectedFile: (filename: string, id: string) => void
 }
 
-const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }: filesProps) => {
+const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesProps) => {
     const [fileNames, setFileNames] = React.useState([])
     const [selectedFile, setSelectedFile] = React.useState('')
     const [loading, setLoading] = React.useState(false)
@@ -59,7 +59,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
         } else {
             navigate('/')
         }
-    }, [])
+    }, [navigate])
 
 
     const renderFiles = () => {
@@ -70,7 +70,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
                 if (fileType === 'wav' || fileType === 'mp3') {
                     return (
                         <div key={file.id} className="fileRow">
-                            <p id="file-name">{file.file}</p>
+                            <p id={selectedFile === src + file.file.toLowerCase() ? "file-name-playing" : "file-name"}>{file.file}</p>
                             {selectedFile === src + file.file.toLowerCase() ?
                                 <img alt="pause" src={pauseIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile('')}></img>
                                 :
@@ -96,7 +96,7 @@ const FilesView = ({ folders, isLoading, logOut, diskSpace, deleteSelectedFile }
         } else {
             return (
                 <div className="emptyFolder">
-                    <img src={emptyIcon}></img>
+                    <img alt="empty" src={emptyIcon}></img>
                     <h3 style={{ color: '#ffffff' }}>Tyhjä</h3>
                 </div>
             )

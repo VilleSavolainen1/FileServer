@@ -205,7 +205,6 @@ function App() {
             deleteSelectedFolder={deleteSelectedFolder} /> :
           <Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />
         } />
-        {/* <Route path="/login" element={<Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />} /> */}
         <Route path="/:foldername" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} deleteSelectedFile={deleteSelectedFile} />} />
       </Routes>
     )
