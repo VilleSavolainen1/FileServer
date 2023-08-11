@@ -1,4 +1,4 @@
-import { logoutIcon } from '../images'
+import { bubbleIcon, logoutIcon } from '../images'
 import { diskSpace } from '../types'
 import ProgressBar from "@ramonak/react-progress-bar"
 
@@ -19,6 +19,7 @@ const TopBar = ({ signOut, diskSpace }: TopBarProps) => {
                     <div className="progressBar">
                         <ProgressBar completed={percentage} bgColor='#3D4991' borderRadius='0' height='10px' customLabel=' ' />
                     </div>
+                    <img alt="speech" style={{width: '28px', marginLeft: '8px', cursor: 'pointer'}} src={bubbleIcon}></img>
                 </div>
                 <div className="logout">
                     <button className="logOutButton" onClick={signOut}>Kirjaudu ulos</button>
