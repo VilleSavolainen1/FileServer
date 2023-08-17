@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom'
 import { bubbleIcon, logoutIcon } from '../images'
 import { diskSpace } from '../types'
 import ProgressBar from "@ramonak/react-progress-bar"
+import { useLocation } from 'react-router-dom'
 
 export interface TopBarProps {
     signOut: () => void
@@ -10,6 +12,8 @@ export interface TopBarProps {
 const TopBar = ({ signOut, diskSpace }: TopBarProps) => {
     const used = diskSpace.size - diskSpace.free
     const percentage: any = (used * 100 / diskSpace.size).toFixed();
+    const route = useLocation().pathname
+
 
     return (
         <div className="topBar">
@@ -19,7 +23,7 @@ const TopBar = ({ signOut, diskSpace }: TopBarProps) => {
                     <div className="progressBar">
                         <ProgressBar completed={percentage} bgColor='#3D4991' borderRadius='0' height='10px' customLabel=' ' />
                     </div>
-                    <img alt="speech" style={{width: '28px', marginLeft: '8px', cursor: 'pointer'}} src={bubbleIcon}></img>
+                    {route !== '/chat' && <Link to={'/chat'}><img alt="speech" style={{ width: '28px', marginLeft: '8px', cursor: 'pointer' }} src={bubbleIcon}></img></Link>}
                 </div>
                 <div className="logout">
                     <button className="logOutButton" onClick={signOut}>Kirjaudu ulos</button>

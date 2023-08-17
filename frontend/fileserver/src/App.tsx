@@ -12,6 +12,8 @@ import axios from 'axios';
 import { Folder, diskSpace } from './types';
 import Loader from './components/Loader';
 import { deleteFile, deleteFolder, getFileNames } from './services';
+import Chat from './screens/Chat';
+import { io } from 'socket.io-client';
 
 type State = {
   folders: Folder
@@ -34,6 +36,8 @@ const events = [
   "scroll",
   "keypress",
 ]
+
+const socket = io('http://localhost:3000');
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
@@ -205,6 +209,7 @@ function App() {
             deleteSelectedFolder={deleteSelectedFolder} /> :
           <Login setHasLoggedIn={setHasLoggedIn} isLoading={isLoading} />
         } />
+        <Route path="/chat" element={<Chat socket={socket} />} />
         <Route path="/:foldername" element={<FilesView folders={folders} isLoading={isLoading} logOut={logOut} diskSpace={diskSpace} deleteSelectedFile={deleteSelectedFile} />} />
       </Routes>
     )

@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { createServer } = require('http')
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors')
@@ -10,7 +11,17 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken')
 const path = require('path')
 const checkDiskSpace = require('check-disk-space').default
+const httpServer = createServer(app)
+const { Server } = require('socket.io')
 
+const io = new Server(httpServer, {
+    cors: {
+        origin: ["http://localhost:3000"],
+        methods: ["GET", "POST"]
+    }
+})
+
+app.use(cors());
 
 const db = knex({
     client: 'pg',
@@ -22,11 +33,42 @@ const db = knex({
     }
 });
 
+let users = []
+
+io.on('connection', (socket) => {
+    console.log('user connected ', socket.id)
+    socket.on("send_message", (data) => {
+        io.emit("receive_message", data)
+    })
+
+    socket.on('typing', (data) => socket.broadcast.emit('typingResponse', data));
+
+
+    //Listens when a new user joins the server
+    socket.on('newUser', (data) => {
+        //Adds the new user to the list of users
+        users.push(data);
+        console.log(users);
+        //Sends the list of users to the client
+        io.emit('newUserResponse', users);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('A user disconnected');
+        //Updates the list of users when a user disconnects from the server
+        users = users.filter((user) => user.socketID !== socket.id);
+        // console.log(users);
+        //Sends the list of users to the client
+        io.emit('newUserResponse', users);
+        socket.disconnect();
+    });
+})
+
+
 // /files folder
 const filesPathOnServer = path.join(__dirname, '..', '..', '..', '/files/')
 const filesPathOnTest = path.join(__dirname, '..', '/files/')
 
-app.use(cors());
 app.use(bodyParser.json());
 if (process.env.ENVIRONMENT === 'test') {
     app.use(filesPathOnTest, express.static('files'));
@@ -179,7 +221,6 @@ app.post('/create-folder', (req, res) => {
     let { folder } = req.body;
     db.insert({ name: folder }).into('folders')
         .then(r => {
-            console.log("created")
             res.send("created")
         })
 })
@@ -206,14 +247,12 @@ app.post('/delete', (req, res) => {
         return res.status(401).json({ error: 'token invalid' })
     }
     let { file, id } = req.body;
-    console.log('FILE', file, 'ID: ', id)
     db.delete().from('files').where('id', '=', id).then(async msg => {
         res.json("deleted")
         try {
             await fs.unlink(process.env.ENVIRONMENT === 'test' ? filesPathOnTest + file.toLowerCase() : filesPathOnServer + file.toLowerCase())
             res.status(200)
         } catch (err) {
-            console.log(err)
             res.status(500)
         }
     })
@@ -247,4 +286,4 @@ app.get('/disk', (req, res) => {
     }
 })
 
-app.listen(process.env.port, () => console.log("server started on port", process.env.port))
+httpServer.listen(process.env.port, () => console.log("server started on port", process.env.port))

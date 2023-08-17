@@ -380,6 +380,119 @@
   background: linear-gradient(0deg, rgb(2, 2, 17) 0%, rgba(11,19,42,1) 50%, rgb(17, 30, 49) 100%);
 }
 
+.chatRoom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  flex-direction: column;
+}
+
+.chatLog {
+  margin-top: 250px;
+  display: flex;
+}
+
+.chatForm {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chat__sidebar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  background-color: #101a29;
+  z-index: 2;
+}
+
+.chat__users {
+  display: flex;
+  flex-direction: row;
+}
+
+.message {
+  width: 80%;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  outline: none;
+  padding: 15px;
+}
+.sendBtn {
+  width: 150px;
+  background-color: green;
+  padding: 10px;
+  border: none;
+  outline: none;
+  color: #eae3d2;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.message__container {
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: center;
+  margin-top: 110px;
+}
+
+.message__chats {
+  max-height: 250px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 40px;
+}
+
+.message__recipient {
+  display: flex;
+  flex-direction: row;
+  width: 95%;
+  padding: 3px;
+  font-size: 13px;
+}
+.message__sender {
+  display: flex;
+  flex-direction: row;
+  max-width: 95%;
+  padding: 3px;
+  font-size: 13px;
+}
+
+.sender__name {
+  color: white;
+  width: 70px;
+}
+
+.message_recipient_text {
+  color: rgb(113, 139, 255)
+}
+
+.message_sender_text {
+  color: greenyellow
+}
+
+.message__status {
+  margin-left: 40px;
+}
+
+.leaveChat__btn {
+  width: 100px;
+  height: 40px;
+  background-color: rgb(252, 81, 118);
+  padding: 10px;
+  border: none;
+  outline: none;
+  color: #eae3d2;
+  cursor: pointer;
+}
+
 @media(max-width: 920px){
   .login{
     width: 90%;

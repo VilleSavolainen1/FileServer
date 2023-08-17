@@ -68,7 +68,7 @@ const Login = ({setHasLoggedIn, isLoading}: LoginProps) => {
                     <input id="foldernameinput" type="password" name="password" value={password} placeholder="Salasana" onChange={passwordChange} ></input>
                     <div className="blank"></div>
                     <input className="form-submit" type="submit" value="Kirjaudu"></input>
-                    <p className="message">{message}</p>
+                    <p className="errorMessage" style={{color: 'red'}}>{message}</p>
                 </form>
             </div>
         </div>
