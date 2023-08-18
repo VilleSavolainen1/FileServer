@@ -82,7 +82,7 @@ const Chat = ({ socket }: chatProps) => {
                 <div className="chat">
                     <ChatBar socket={socket} users={users} />
                     <div className="chat__main">
-                        <ChatBody messages={messageReceived} typingStatus={typingStatus} lastMessageRef={lastMessageRef} />
+                        <ChatBody messages={messageReceived} typingStatus={typingStatus} lastMessageRef={lastMessageRef} users={users} />
                         <ChatFooter socket={socket} />
                     </div>
                 </div>

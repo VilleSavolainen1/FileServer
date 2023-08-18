@@ -1,11 +1,8 @@
 import React from 'react';
 import { getValueForKey } from '../utils';
 
-const ChatBody = ({ messages, typingStatus, lastMessageRef }: any) => {
-    console.log('MESSAGES: ', messages)
-
-    console.log('CHAT USER: ', getValueForKey('chat_user'))
-
+const ChatBody = ({ messages, typingStatus, lastMessageRef, users }: any) => {
+   
     return (
         <div className="main">
 
@@ -21,7 +18,7 @@ const ChatBody = ({ messages, typingStatus, lastMessageRef }: any) => {
                         </div>
                     ) : (
                         <div className="message__chats" key={message.id}>
-                            <p className="sender__name">{message.name}</p>
+                            <p className={users.some((usr: any) => usr.userName === message.name) ? "sender__name" : "sender__name__offline"}>{message.name}</p>
                             <div className="message__recipient">
                                 <p className="message_recipient_text">{message.message}</p>
                             </div>

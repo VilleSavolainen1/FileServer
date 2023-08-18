@@ -470,6 +470,11 @@
   width: 70px;
 }
 
+.sender__name__offline {
+  color: rgb(124, 124, 124);
+  width: 70px;
+}
+
 .message_recipient_text {
   color: rgb(113, 139, 255)
 }
