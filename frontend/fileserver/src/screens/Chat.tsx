@@ -1,7 +1,5 @@
 import React from 'react'
 import { storeValueForKey } from '../utils';
-import TopBar from '../components/TopBar';
-import { diskSpace } from '../types';
 import ChatBody from '../components/ChatBody';
 import ChatBar from '../components/ChatBar';
 import ChatFooter from '../components/ChatFooter';
@@ -56,9 +54,7 @@ const Chat = ({ socket }: chatProps) => {
 
     React.useEffect(() => {
         socket.on('typingResponse', (data: any) => setTypingStatus(data));
-        setTimeout(() => {
-            setTypingStatus('')
-        }, 2000)
+        setTypingStatus('')
     }, [socket, typingStatus]);
 
 
