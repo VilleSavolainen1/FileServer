@@ -64,7 +64,7 @@ const Chat = ({ socket }: chatProps) => {
             <div className="chatRoom">
                 <div className="chatLog">
                     <form className="loginForm" onSubmit={onSubmit}>
-                        <input id="foldernameinput" type="text" name="username" value={userName} placeholder="Nimi" onChange={usernameChange}></input>
+                        <input id="foldernameinput" type="text" name="username" value={userName} autoFocus={true} placeholder="Nimi" onChange={usernameChange}></input>
                         <div className="blank"></div>
                         <input className="form-submit" type="submit" value="Sisään"></input>
                         <p className="errorMessage" style={{ color: 'red' }}>{message}</p>

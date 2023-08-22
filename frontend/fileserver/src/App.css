@@ -414,6 +414,7 @@
 .chat__users {
   display: flex;
   flex-direction: row;
+  align-items: center;
 }
 
 .message {
@@ -467,12 +468,12 @@
 
 .sender__name {
   color: white;
-  width: 70px;
+  width: 60px;
 }
 
 .sender__name__offline {
   color: rgb(78, 78, 78);
-  width: 70px;
+  width: 60px;
 }
 
 .message_recipient_text {

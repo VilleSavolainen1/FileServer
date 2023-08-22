@@ -15,15 +15,15 @@ const ChatBar = ({ users }: any) => {
 
     return (
         <div className="chat__sidebar">
-                <div className="chat__users">
-                    <p style={{marginLeft: '10px', color: 'white'}}>Paikalla: </p>
-                    {users.map((user: any) => (
-                        <p style={{color: 'grey', marginLeft: '10px'}} key={user.socketID}>{user.userName}</p>
-                    ))}
-                </div>
-                <button className="leaveChat__btn" onClick={handleLeaveChat}>
-                    Poistu
-                </button>
+            <div className="chat__users">
+                <p style={{ marginLeft: '10px', color: 'grey' }}>Paikalla: </p>
+                {users.map((user: any) => (
+                    <p style={{ color: 'white', marginLeft: '10px', fontSize: '14px' }} key={user.socketID}>@{user.userName}</p>
+                ))}
+            </div>
+            <button className="leaveChat__btn" onClick={handleLeaveChat}>
+                Poistu
+            </button>
         </div>
     );
 };
