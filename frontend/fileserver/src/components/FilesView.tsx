@@ -6,7 +6,7 @@ import UploadFile from './UploadFile';
 import { getFileNames } from '../services';
 import { getValueForKey } from '../utils';
 import Loader from './Loader';
-import { arrowBackIcon, downloadIcon, emptyIcon, pauseIcon, playIcon, trashIcon } from '../images';
+import { arrowBackIcon, downloadIcon, emptyIcon, fileIcon, pauseIcon, playIcon, trashIcon } from '../images';
 import 'react-h5-audio-player/lib/styles.css';
 import BottomPlayer from './BottomPlayer';
 
@@ -21,6 +21,7 @@ interface filesProps {
 
 const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesProps) => {
     const [fileNames, setFileNames] = React.useState([])
+    const [allFileNames, setAllFileNames] = React.useState([])
     const [selectedFile, setSelectedFile] = React.useState('')
     const [loading, setLoading] = React.useState(false)
     const name = useParams().foldername
@@ -33,6 +34,7 @@ const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesPr
         setLoading(true)
         const token = getValueForKey('access_token')
         const files = await getFileNames(token)
+        setAllFileNames(files.data)
         const data = files.data
         const currentFolderFiles = data.filter((file: any) => file.folder === name)
         setFileNames(currentFolderFiles)
@@ -90,8 +92,12 @@ const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesPr
                 } else {
                     return (
                         <div key={file.id} className="fileRow">
-                            <p id="file-name">{file.file}</p>
-                            <div style={{ width: '35px' }}></div>
+                            <div className="fileNameRow">
+                                <p id="file-name">{file.file}</p>
+                            </div>
+                            <div className="playButtons">
+                                <img alt="file" src={fileIcon} style={{ width: '20px', marginLeft: '6px' }}></img>
+                            </div>
                             <p id="file-date">{date}</p>
                             <div className="fileActionButtons">
                                 <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
@@ -125,7 +131,7 @@ const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesPr
                     <div className="foldersContent">
                         <div className="foldersHeader">
                             <h1 style={{ color: '#ffffff', marginBottom: '40px' }}>{name}</h1>
-                            <UploadFile name={name} isLoading={isLoading} />
+                            <UploadFile name={name} isLoading={isLoading} allFileNames={allFileNames} />
                         </div>
                         <div className="filesView">
                             {renderFiles()}

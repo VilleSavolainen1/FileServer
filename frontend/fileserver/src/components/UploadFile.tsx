@@ -5,9 +5,18 @@ import { saveFileName, uploadManyFiles } from '../services';
 interface uploadProps {
     name: string | undefined
     isLoading: (value: boolean) => void
+    allFileNames: any
 }
 
-const UploadFile = ({ name, isLoading }: uploadProps) => {
+interface FileArray {
+    name: string
+    lastModified: number
+    webkitRelativePath: string
+    size: number
+    type: string
+}
+
+const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
 
     //state for checking file size
     const [fileSize, setFileSize] = React.useState(true);
@@ -18,9 +27,24 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
 
     const [files, setFiles] = React.useState<any[]>([])
 
-    const uploadFileHandler = (e: any) => {
-        setFiles(e.target.files);
+
+    const checkIfExists = async (arr: FileArray[]) => {
+        for (let i = 0; i < arr.length; i++) {
+            allFileNames.some((fl: any) => {
+                if (fl.file === arr[i].name) {
+                    window.alert(`Tiedosto ${arr[i].name} on jo olemassa`)
+                    window.location.reload();
+                }
+            })
+        }
+    }
+
+    const uploadFileHandler = async (e: any) => {
+        const files = e.target.files
+        await checkIfExists(files)
+        setFiles(files)
     };
+
 
     const uploadFiles = (e: any) => {
         isLoading(true)
@@ -52,7 +76,7 @@ const UploadFile = ({ name, isLoading }: uploadProps) => {
     return (
         <div className="uploadFileForm">
             <form onSubmit={uploadFiles}>
-                <p style={{fontSize: '14px'}}>Lisää tiedostoja:</p>
+                <p style={{ fontSize: '14px' }}>Lisää tiedostoja:</p>
                 <div className="blank"></div>
                 <input type="file" multiple onChange={uploadFileHandler} />
                 <button type='submit'>Lähetä</button>
