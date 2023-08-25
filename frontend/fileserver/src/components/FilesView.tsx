@@ -70,25 +70,33 @@ const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesPr
                 if (fileType === 'wav' || fileType === 'mp3') {
                     return (
                         <div key={file.id} className="fileRow">
-                            <p id={selectedFile === src + file.file.toLowerCase() ? "file-name-playing" : "file-name"}>{file.file}</p>
-                            {selectedFile === src + file.file.toLowerCase() ?
-                                <img alt="pause" src={pauseIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile('')}></img>
-                                :
-                                <img alt="play" src={playIcon} style={{ width: '35px', cursor: 'pointer', marginRight: '20px' }} onClick={() => setSelectedFile(src + file.file.toLowerCase())} ></img>
-                            }
+                            <div className="fileNameRow">
+                                <p id={selectedFile === src + file.file.toLowerCase() ? "file-name-playing" : "file-name"}>{file.file}</p>
+                            </div>
+                            <div className="playButtons">
+                                {selectedFile === src + file.file.toLowerCase() ?
+                                    <img alt="pause" src={pauseIcon} style={{ width: '35px', cursor: 'pointer' }} onClick={() => setSelectedFile('')}></img>
+                                    :
+                                    <img alt="play" src={playIcon} style={{ width: '35px', cursor: 'pointer' }} onClick={() => setSelectedFile(src + file.file.toLowerCase())} ></img>
+                                }
+                            </div>
                             <p id="file-date">{date}</p>
-                            <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
-                            <img alt="trash" className="deleteButton" src={trashIcon} onClick={() => onPressDeleteFile(file.file, file.id)}></img>
+                            <div className="fileActionButtons">
+                                <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
+                                <img alt="trash" className="deleteButton" src={trashIcon} onClick={() => onPressDeleteFile(file.file, file.id)}></img>
+                            </div>
                         </div>
                     )
                 } else {
                     return (
                         <div key={file.id} className="fileRow">
                             <p id="file-name">{file.file}</p>
-                            <div style={{width: '55px'}}></div>
+                            <div style={{ width: '35px' }}></div>
                             <p id="file-date">{date}</p>
-                            <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
-                            <img alt="trash" className="deleteButton" src={trashIcon} onClick={() => onPressDeleteFile(file.file, file.id)}></img>
+                            <div className="fileActionButtons">
+                                <a href={src + file.file.toLowerCase()} download target="_self"><img alt="download" className="downloadButton" src={downloadIcon}></img></a>
+                                <img alt="trash" className="deleteButton" src={trashIcon} onClick={() => onPressDeleteFile(file.file, file.id)}></img>
+                            </div>
                         </div>
                     )
                 }

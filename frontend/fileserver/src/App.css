@@ -273,7 +273,11 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid rgb(44, 44, 44);
-  width: 500px;
+  width: 550px;
+}
+
+.fileNameRow {
+  width: 100px
 }
 
 .fileRow-playing {
@@ -297,48 +301,53 @@
   align-items: center;
   margin-top: 15px;
   margin-bottom: 100px;
-  overflow: auto;
-  height: 400px;
+  overflow: scroll;
+  height: 550px;
+}
+
+.fileActionButtons {
+  display: flex;
+  flex-direction: row;
+  width: 90px;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
 #file-date {
   color: rgb(122, 122, 122);
-  margin-right: 5px;
   width: 50px;
   font-size: 12px;
   overflow: hidden;
-  border-right: 1px solid rgb(44, 44, 44);
 }
 
 #file-name {
   color: white;
-  width: 110px;
-  font-size: 12px;
+  width: 130px;
+  font-size: 11px;
   overflow: hidden;
-  border-right: 1px solid rgb(44, 44, 44);
 }
 
 #file-name-playing {
   color: rgb(122, 255, 182);
-  width: 110px;
+  width: 130px;
   font-size: 12px;
   overflow: hidden;
-  border-right: 1px solid rgb(44, 44, 44);
 }
 
 .deleteButton {
   cursor: pointer;
   padding: 5px;
   width: 20px;
-  margin-left: 5px;
-  margin-right: 7px;
 }
 
 .downloadButton {
   cursor: pointer;
   width: 25px;
   padding: 5px;
-  margin-left: 5px;
+}
+
+.playButtons {
+  width: 50px;
 }
 
 .deleteButtonButton {
