@@ -33,7 +33,6 @@ const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
             allFileNames.some((fl: any) => {
                 if (fl.file === arr[i].name) {
                     window.alert(`Tiedosto ${arr[i].name} on jo olemassa`)
-                    window.location.reload();
                 }
             })
         }
