@@ -51,11 +51,11 @@ const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
 
 
     const uploadFiles = (e: any) => {
+        e.preventDefault();
         if (disableUpload) {
             return window.alert(`Tiedosto ${disabledName} on jo olemassa`)
         } else {
             isLoading(true)
-            e.preventDefault();
             const token = getValueForKey('access_token')
             const data = new FormData();
             for (let i = 0; i < files.length; i++) {
