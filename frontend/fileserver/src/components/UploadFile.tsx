@@ -26,12 +26,16 @@ const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
     const [fileUploadResponse, setFileUploadResponse] = React.useState(null);
 
     const [files, setFiles] = React.useState<any[]>([])
+    const [disableUpload, setDisableUpload] = React.useState(false)
+    const [disabledName, setDisabledName] = React.useState('')
 
 
     const checkIfExists = async (arr: FileArray[]) => {
         for (let i = 0; i < arr.length; i++) {
             allFileNames.some((fl: any) => {
                 if (fl.file === arr[i].name) {
+                    setDisableUpload(true)
+                    setDisabledName(arr[i].name)
                     window.alert(`Tiedosto ${arr[i].name} on jo olemassa`)
                 }
             })
@@ -39,6 +43,7 @@ const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
     }
 
     const uploadFileHandler = async (e: any) => {
+        setDisableUpload(false)
         const files = e.target.files
         await checkIfExists(files)
         setFiles(files)
@@ -46,30 +51,34 @@ const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
 
 
     const uploadFiles = (e: any) => {
-        isLoading(true)
-        e.preventDefault();
-        const token = getValueForKey('access_token')
-        const data = new FormData();
-        for (let i = 0; i < files.length; i++) {
-            console.log(files[i])
-            if (files[i].size > 137000000) {
-                setFileSize(false);
-                setFileUploadProgress(false);
-                setFileUploadResponse(null);
-                return;
+        if (disableUpload) {
+            return window.alert(`Tiedosto ${disabledName} on jo olemassa`)
+        } else {
+            isLoading(true)
+            e.preventDefault();
+            const token = getValueForKey('access_token')
+            const data = new FormData();
+            for (let i = 0; i < files.length; i++) {
+                console.log(files[i])
+                if (files[i].size > 137000000) {
+                    setFileSize(false);
+                    setFileUploadProgress(false);
+                    setFileUploadResponse(null);
+                    return;
+                }
+                saveFileName(files[i].name, name, token).then(res => {
+                    console.log(res)
+                })
+                data.append(`files`, files[i])
             }
-            saveFileName(files[i].name, name, token).then(res => {
+            uploadManyFiles(data, token).then(res => {
                 console.log(res)
+                isLoading(false)
+            }).catch(err => {
+                console.log(err)
+                isLoading(false)
             })
-            data.append(`files`, files[i])
         }
-        uploadManyFiles(data, token).then(res => {
-            console.log(res)
-            isLoading(false)
-        }).catch(err => {
-            console.log(err)
-            isLoading(false)
-        })
     }
 
     return (
