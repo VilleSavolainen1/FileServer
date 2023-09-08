@@ -16,7 +16,7 @@ const { Server } = require('socket.io')
 
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://165.22.80.179",
+        origin: "https://descents.rocks",
         methods: ["GET", "POST"]
     }
 })

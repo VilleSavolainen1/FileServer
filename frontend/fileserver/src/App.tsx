@@ -37,7 +37,7 @@ const events = [
   "keypress",
 ]
 
-const socket = io('http://165.22.80.179');
+const socket = io('https://descents.rocks');
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
