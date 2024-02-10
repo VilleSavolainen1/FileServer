@@ -67,7 +67,7 @@ const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesPr
     const renderFiles = () => {
         if (fileNames.length || fileNames === undefined) {
             return fileNames.map((file: any) => {
-                let fileType = file.file.split(".")[1]; // .txt .wav ....
+                let fileType = file.file.split(/\.(?=[^\.]+$)/)[1]; // .txt .wav ....
                 let date = new Date(file.date).toLocaleDateString('fi-Fi')
                 if (fileType === 'wav' || fileType === 'mp3') {
                     return (
