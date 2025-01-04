@@ -130,7 +130,7 @@ const FilesView = ({ isLoading, logOut, diskSpace, deleteSelectedFile }: filesPr
                     </div>
                     <div className="foldersContent">
                         <div className="foldersHeader">
-                            <h1 style={{ color: '#ffffff', marginBottom: '40px' }}>{name}</h1>
+                            <h1 style={{ color: '#ffffff', marginBottom: '20px' }}>{name}</h1>
                             <UploadFile name={name} isLoading={isLoading} allFileNames={allFileNames} />
                         </div>
                         <div className="filesView">

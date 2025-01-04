@@ -64,7 +64,7 @@ const UploadFile = ({ name, isLoading, allFileNames }: uploadProps) => {
                     setFileSize(false);
                     setFileUploadProgress(false);
                     setFileUploadResponse(null);
-                    return;
+                    return window.alert('Tiedoston koko ylittyy!!');
                 }
                 saveFileName(files[i].name, name, token).then(res => {
                     console.log(res)

@@ -14,9 +14,11 @@ $rhap_font-family: inherit !default;
 const BottomPlayer = ({ file }: playerProps) => {
     return (
         <div className="bottomPlayer">
-            <AudioPlayer src={file} showSkipControls={false} showJumpControls={true}
-                customAdditionalControls={[RHAP_UI.CURRENT_LEFT_TIME]} customProgressBarSection={[RHAP_UI.PROGRESS_BAR]} customVolumeControls={[]}
+            <div className="playerControls">
+            <AudioPlayer src={file} showSkipControls={false} showJumpControls={false}
+                customAdditionalControls={[RHAP_UI.CURRENT_LEFT_TIME]} customProgressBarSection={[RHAP_UI.PROGRESS_BAR]} customVolumeControls={[RHAP_UI.VOLUME]}
                 layout="horizontal" />
+            </div>
         </div>
     )
 }
