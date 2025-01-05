@@ -302,6 +302,7 @@
   margin-top: 15px;
   margin-bottom: 100px;
   overflow: scroll;
+  overflow-x: hidden;
   height: 530px;
   padding: 12px;
 }
